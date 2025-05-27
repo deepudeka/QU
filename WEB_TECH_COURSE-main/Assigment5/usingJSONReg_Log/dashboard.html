@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Assignment Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    pre {
+      background: #f9f9f9;
+      padding: 10px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📘 Online Lab Assignment Dashboard</h1>
+
+  <h2>1. User List (`array_object.json`)</h2>
+  <table id="userTable">
+    <tr><th>Name</th><th>Age</th><th>Gender</th></tr>
+  </table>
+
+  <h2>2. Single User Profile (`data.json`)</h2>
+  <div id="profileBox"></div>
+
+  <h2>3. Detailed Users with Address (`nested_obj.json`)</h2>
+  <table id="detailedTable">
+    <tr><th>Name</th><th>Age</th><th>Gender</th><th>City</th><th>Pincode</th></tr>
+  </table>
+
+  <h2>4. Basic Profile (`obj.json`)</h2>
+  <pre id="simpleObj"></pre>
+
+  <h2>5. Profile with Profession (`save.json`)</h2>
+  <pre id="fullProfile"></pre>
+
+  <script>
+    // Load user list
+    fetch('array_object.json')
+      .then(res => res.json())
+      .then(data => {
+        const table = document.getElementById('userTable');
+        for (let id in data) {
+          let user = data[id];
+          table.innerHTML += `<tr><td>${user.name}</td><td>${user.age}</td><td>${user.gender}</td></tr>`;
+        }
+      });
+
+    // Load single user profile
+    fetch('data.json')
+      .then(res => res.json())
+      .then(user => {
+        document.getElementById('profileBox').innerHTML = `
+          <p><strong>Name:</strong> ${user.firstName} ${user.lastName}</p>
+          <p><strong>Email:</strong> ${user.email}</p>
+          <p><strong>Phone:</strong> ${user.phone}</p>
+        `;
+      });
+
+    // Load detailed user data
+    fetch('nested_obj.json')
+      .then(res => res.json())
+      .then(data => {
+        const table = document.getElementById('detailedTable');
+        for (let id in data) {
+          const u = data[id];
+          table.innerHTML += `<tr>
+            <td>${u.name}</td>
+            <td>${u.age}</td>
+            <td>${u.gender}</td>
+            <td>${u.address.city}</td>
+            <td>${u.address.pincode}</td>
+          </tr>`;
+        }
+      });
+
+    // Load basic object
+    fetch('obj.json')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('simpleObj').textContent = JSON.stringify(data, null, 2);
+      });
+
+    // Load full profile with profession
+    fetch('save.json')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('fullProfile').textContent = JSON.stringify(data, null, 2);
+      });
+  </script>
+</body>
+</html>
